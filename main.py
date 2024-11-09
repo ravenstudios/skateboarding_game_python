@@ -1,12 +1,16 @@
 from constants import *
 import pygame
-
+import player
 
 
 clock = pygame.time.Clock()
 surface = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
 
 pygame.init()
+
+player_group = pygame.sprite.Group()
+player = player.Player(64, 64)
+player_group.add(player)
 
 
 def main():
@@ -36,11 +40,12 @@ def draw():
 
     pygame.draw.rect(surface, (255, 255, 255), (50, 50, 50, 50))
     pygame.display.flip()
+    player_group.draw(surface)
 
 
 
 def update():
-    pass
+    player_group.update()
 
 
 
