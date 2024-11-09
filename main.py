@@ -38,9 +38,10 @@ def main():
 def draw():
     surface.fill((0, 0, 0))#background
 
-    pygame.draw.rect(surface, (255, 255, 255), (50, 50, 50, 50))
-    pygame.display.flip()
     player_group.draw(surface)
+    pygame.display.flip()
+    
+
 
 
 
