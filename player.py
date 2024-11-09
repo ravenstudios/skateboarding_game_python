@@ -10,10 +10,11 @@ from constants import *
 class Player(pygame.sprite.Sprite):
     def __init__(self, width, height):
         super().__init__()
+        self.height = BLOCK_SIZE
         self.x = 0 + 64
-        self.y = GAME_HEIGHT - 16
-        self.width = 128
-        self.height = 16
+        self.y = GAME_HEIGHT - self.height
+        self.width = BLOCK_SIZE
+
         self.max_speed = 10
         self.acceleration = 0.5
         self.deceleration = 0.2
