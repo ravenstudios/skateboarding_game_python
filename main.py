@@ -1,7 +1,7 @@
 from constants import *
 import pygame
 import player
-
+import block
 
 clock = pygame.time.Clock()
 surface = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
@@ -9,9 +9,14 @@ surface = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
 pygame.init()
 
 player_group = pygame.sprite.Group()
+blocks = pygame.sprite.Group()
+
 player = player.Player(64, 64)
 player_group.add(player)
 
+
+for i in range(10):
+    blocks.add(block.Block(i * 300, GAME_HEIGHT - BLOCK_SIZE))
 
 def main():
     running = True
@@ -38,12 +43,10 @@ def main():
 def draw():
     surface.fill((0, 0, 0))#background
 
+    blocks.draw(surface)
     player_group.draw(surface)
+
     pygame.display.flip()
-    
-
-
-
 
 def update():
     player_group.update()

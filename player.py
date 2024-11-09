@@ -10,19 +10,25 @@ from constants import *
 class Player(pygame.sprite.Sprite):
     def __init__(self, width, height):
         super().__init__()
-        self.height = BLOCK_SIZE
-        self.x = 0 + 64
-        self.y = GAME_HEIGHT - self.height
-        self.width = BLOCK_SIZE
+
 
         self.max_speed = 10
         self.acceleration = 0.5
         self.deceleration = 0.2
         self.push_power = 0
+
+        self.height = height
+        self.x = GAME_WIDTH // 2
+        self.y = GAME_HEIGHT - self.height
+        self.width = width
+
+        self.speed = 5
+
         self.image = pygame.Surface([self.width, self.height])
         self.image.fill((255, 255 ,255))
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
+
 
     def update(self):
         self.push()
