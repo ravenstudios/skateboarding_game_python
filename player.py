@@ -11,9 +11,9 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, width, height):
         super().__init__()
         self.x = 0 + 64
-        self.y = GAME_HEIGHT
-        self.width = width
-        self.height = height
+        self.y = GAME_HEIGHT - 16
+        self.width = 128
+        self.height = 16
         self.max_speed = 10
         self.acceleration = 0.5
         self.deceleration = 0.2
@@ -21,7 +21,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.Surface([self.width, self.height])
         self.image.fill((255, 255 ,255))
         self.rect = self.image.get_rect()
-        self.rect.bottomleft = (self.x, self.y)
+        self.rect.topleft = (self.x, self.y)
 
     def update(self):
         self.push()
