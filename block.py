@@ -8,11 +8,11 @@ import pygame, random
 from constants import *
 
 class Block(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, width):
         super().__init__()
         self.x = x
         self.y = y
-        self.width = BLOCK_SIZE
+        self.width = width
         self.height = BLOCK_SIZE
 
         self.image = pygame.Surface([self.width, self.height])
@@ -24,5 +24,5 @@ class Block(pygame.sprite.Sprite):
 
 
 
-    def update(self):
-        pass
+    def update(self, cam_offset):
+        self.rect.x += cam_offset

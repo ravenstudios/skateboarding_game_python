@@ -30,8 +30,10 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = (self.x, self.y)
 
 
-    def update(self):
+    def update(self, cam_offset):
         self.push()
+        self.rect.x += cam_offset
+
 
     def push(self):
         keys = pygame.key.get_pressed()
