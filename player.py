@@ -10,15 +10,16 @@ from constants import *
 class Player(pygame.sprite.Sprite):
     def __init__(self, width, height):
         super().__init__()
-        self.x = GAME_WIDTH // 2
-        self.y = GAME_HEIGHT
-        self.width = width
         self.height = height
+        self.x = GAME_WIDTH // 2
+        self.y = GAME_HEIGHT - self.height
+        self.width = width
+
         self.speed = 5
         self.image = pygame.Surface([self.width, self.height])
         self.image.fill((255, 255 ,255))
         self.rect = self.image.get_rect()
-        self.rect.bottomleft = (self.x, self.y)
+        self.rect.topleft = (self.x, self.y)
 
 
 
