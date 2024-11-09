@@ -43,8 +43,6 @@ def main():
 def draw():
     surface.fill((0, 0, 0))#background
 
-
-
     blocks.draw(surface)
     player_group.draw(surface)
 
