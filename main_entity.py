@@ -17,8 +17,7 @@ class Main_entity(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
 
-        self.spritesheet = pygame.image.load("imgs/skate-Sheet.png").convert()
-
+        self.spritesheet = pygame.image.load("imgs/skate-Sheet.png").convert_alpha()
         scaled_width, scaled_heights = self.spritesheet.get_size()
         self.spritesheet = pygame.transform.scale(self.spritesheet, (scaled_width * SCALER, scaled_heights * SCALER))
 
@@ -28,11 +27,18 @@ class Main_entity(pygame.sprite.Sprite):
         self.animation_speed = 10
         self.ticks_till_frame_change = self.animation_speed
 
-
+        self.mask = pygame.mask.from_surface(self.image)
+        self.mask_img = self.mask.to_surface()
 
     def update(self, cam_offset):
-        self.rect.x += cam_offset
+        self.update_cam_offset(cam_offset)
         self.animate()
+
+
+
+
+    def update_cam_offset(self, cam_offset):
+        self.rect.x += cam_offset
 
 
 
@@ -61,3 +67,4 @@ class Main_entity(pygame.sprite.Sprite):
                 self.frame = 0
 
         self.image = self.get_image_from_sprite_sheet(self.frame, self.y_sprite_sheet_index)
+        self.mask = pygame.mask.from_surface(self.image)

@@ -3,7 +3,7 @@ import pygame
 import player
 import block
 import camera
-import mob
+
 
 
 clock = pygame.time.Clock()
@@ -15,17 +15,16 @@ pygame.init()
 camera = camera.Camera()
 
 player_group = pygame.sprite.Group()
-mob_group = pygame.sprite.Group()
-mob = mob.Mob(200, 50)
-mob_group.add(mob)
+
 blocks = pygame.sprite.Group()
 
-player = player.Player(64, 64)
+player = player.Player(GAME_WIDTH // 2, 0)
 player_group.add(player)
-player.rect.y = GAME_HEIGHT - (BLOCK_SIZE * 2)
+
 
 for i in range(100):
     blocks.add(block.Block(i * BLOCK_SIZE, GAME_HEIGHT - BLOCK_SIZE))
+blocks.add(block.Block(400, GAME_HEIGHT - BLOCK_SIZE * 2))
 
 
 
@@ -52,19 +51,22 @@ def main():
 
 
 def draw():
-    surface.fill((0, 0, 0))#background
+    surface.fill((100, 100, 100))#background
 
     blocks.draw(surface)
     player_group.draw(surface)
-    mob_group.draw(surface)
+
     pygame.display.flip()
+
+
+
 
 def update():
     cam_offset = camera.update_offset(player)
 
     blocks.update(cam_offset)
-    player_group.update(cam_offset)
-    mob_group.update(cam_offset)
+    player_group.update(cam_offset, blocks)
+
 
 
 if __name__ == "__main__":
