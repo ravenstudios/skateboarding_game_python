@@ -6,23 +6,14 @@
 # A camera system will be used to side scroll, we will add that later.
 import pygame, random
 from constants import *
-
-class Block(pygame.sprite.Sprite):
-    def __init__(self, x, y, width):
-        super().__init__()
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = BLOCK_SIZE
-
-        self.image = pygame.Surface([self.width, self.height])
-        self.image.fill((255, 0 ,0))
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (self.x, self.y)
+import main_entity
+import random
 
 
+class Block(main_entity.Main_entity):
+    def __init__(self, x, y):
+        super().__init__(x, y)
 
-
-
-    def update(self, cam_offset):
-        self.rect.x += cam_offset
+        self.y_sprite_sheet_index = 4
+        self.frame = random.randint(0, 3)
+        self.animation_speed = 0

@@ -3,13 +3,14 @@ import pygame
 from constants import *
 
 class Main_entity(pygame.sprite.Sprite):
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y):
         super().__init__()
 
-        self.height = height
+
         self.x = x
         self.y = y
-        self.width = width
+        self.width = BLOCK_SIZE
+        self.height = BLOCK_SIZE
 
         self.image = pygame.Surface([self.width, self.height])
         self.image.fill((255, 255 ,255))
@@ -42,20 +43,21 @@ class Main_entity(pygame.sprite.Sprite):
             raise ValueError("col is either below 0 or larger than spritesheet")
 
         image = pygame.Surface([BLOCK_SIZE, BLOCK_SIZE])
-        image.blit(self.spritesheet, (0, 0), (row * (BLOCK_SIZE), col  * (BLOCK_SIZE / SCALER) , BLOCK_SIZE, BLOCK_SIZE))
+        image.blit(self.spritesheet, (0, 0), (row * (BLOCK_SIZE), col  * (BLOCK_SIZE) , BLOCK_SIZE, BLOCK_SIZE))
         return image
 
 
 
     def animate(self):
-        self.ticks_till_frame_change -= 1
+        if self.animation_speed != 0:
+            self.ticks_till_frame_change -= 1
 
-        if self.ticks_till_frame_change <= 0:
-            self.frame += 1
-            self.ticks_till_frame_change = self.animation_speed  # Reset the countdown (or change as needed)
+            if self.ticks_till_frame_change <= 0:
+                self.frame += 1
+                self.ticks_till_frame_change = self.animation_speed  # Reset the countdown (or change as needed)
 
 
-        if self.frame > self.max_frame:
-            self.frame = 0
+            if self.frame > self.max_frame:
+                self.frame = 0
 
         self.image = self.get_image_from_sprite_sheet(self.frame, self.y_sprite_sheet_index)

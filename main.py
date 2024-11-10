@@ -16,7 +16,7 @@ camera = camera.Camera()
 
 player_group = pygame.sprite.Group()
 mob_group = pygame.sprite.Group()
-mob = mob.Mob(200, 50, BLOCK_SIZE, BLOCK_SIZE)
+mob = mob.Mob(200, 50)
 mob_group.add(mob)
 blocks = pygame.sprite.Group()
 
@@ -24,10 +24,10 @@ player = player.Player(64, 64)
 player_group.add(player)
 player.rect.y = GAME_HEIGHT - (BLOCK_SIZE * 2)
 
-for i in range(10):
-    blocks.add(block.Block(i * 1000, GAME_HEIGHT - BLOCK_SIZE * 2, BLOCK_SIZE))
+for i in range(100):
+    blocks.add(block.Block(i * BLOCK_SIZE, GAME_HEIGHT - BLOCK_SIZE))
 
-blocks.add(block.Block(0, GAME_HEIGHT - BLOCK_SIZE, 20000))
+
 
 def main():
     running = True
