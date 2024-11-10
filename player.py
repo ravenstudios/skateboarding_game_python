@@ -121,18 +121,19 @@ class Player(main_entity.Main_entity):
 
         for obj in collisions:
             if type(obj) == block.Block:
-                if self.rect.bottom > obj.rect.top:
+                if self.rect.bottom > obj.rect.top and self.rect.top > obj.rect.top and not self.on_ground:
                     self.vel = 0  # Reset vertical velocity when hitting the ground
                     self.on_ground = True  # Player is now on the ground
                     self.rect.bottom = obj.rect.top
+                    return
 
                 elif self.rect.right > obj.rect.left or self.rect.left > obj.rect.right:
-                    self.push_power > 0
+                    self.push_power = 0
                     if self.dir == "left":
                         self.rect.left = obj.rect.right
                     else:
                         self.rect.right = obj.rect.left
-
+                    return
 
 
     def jump(self):
