@@ -12,8 +12,8 @@ class Player(main_entity.Main_entity):
         super().__init__(x, y)
 
         self.max_speed = 10
-        self.acceleration = 0.5
-        self.friction = 0.2
+        self.acceleration = 5
+        self.friction = 0.02
         self.push_power = 0
         self.lift = -10
         self.grav = 0.3
@@ -31,9 +31,13 @@ class Player(main_entity.Main_entity):
         self.y_sprite_sheet_index = 0
         self.can_play_landing_sound = False
 
+        self.push_sound = pygame.mixer.Sound("sounds/Kick.mp3")
+        self.landing_sound = pygame.mixer.Sound("sounds/Land.mp3")
+        self.rail_sound = pygame.mixer.Sound("sounds/Rail.mp3")
+        self.jump_sound = pygame.mixer.Sound("sounds/Jump.mp3")
 
-    def update(self, cam_offset, objects):
-        self.check_keyboard()
+    def update(self, events, cam_offset, objects):
+        self.check_keyboard(events)
         self.movement()
         self.update_animations()
         self.check_collisions(objects)
@@ -42,30 +46,28 @@ class Player(main_entity.Main_entity):
 
 
 
-    def check_keyboard(self):
-        keys = pygame.key.get_pressed()
+    def check_keyboard(self, events):
+        for event in events:
 
-        if keys[pygame.K_SPACE]:
-            self.jump()
+            if event.type == pygame.KEYDOWN:
 
-        if keys[pygame.K_w]:
-            self.push()
+                if event.key == pygame.K_LEFT:
+                    if self.dir == "right":
+                        self.push_power = 0
+                    self.dir = "left"
+                    self.push()
 
-        if keys[pygame.K_LEFT]:
-            if self.dir == "right":
-                self.push_power = 0
-            self.dir = "left"
-            self.push()
+                if event.key == pygame.K_RIGHT:
+                    if self.dir == "left":
+                        self.push_power = 0
+                    self.dir = "right"
+                    self.push()
 
-        if keys[pygame.K_RIGHT]:
-            if self.dir == "left":
-                self.push_power = 0
-            self.dir = "right"
-            self.push()
+                if event.key == pygame.K_SPACE:
+                    self.jump()
 
-        if keys[pygame.K_DOWN]:
-            self.duck()
-
+                if event.key == pygame.K_DOWN:
+                    self.duck()
 
     def update_animations(self):
 
@@ -115,8 +117,8 @@ class Player(main_entity.Main_entity):
 
 
     def push(self):
-        push_sound = pygame.mixer.Sound("sounds/Kick.mp3")
-        push_sound.play()
+
+        self.push_sound.play()
         if self.push_power < self.max_speed:
             self.push_power += self.acceleration
 
@@ -144,13 +146,13 @@ class Player(main_entity.Main_entity):
                         self.is_jumping = False  # Player is now on the ground
                         self.rect.bottom = obj.rect.top  # Position the player on top of the block
                         if self.can_play_landing_sound:
-                            landing_sound = pygame.mixer.Sound("sounds/Land.mp3")
-                            landing_sound.play()
+
+                            self.landing_sound.play()
                             self.can_play_landing_sound = False
                         return  # Exit after top collision to prevent side adjustment
 
                     # Otherwise, check for side collisions only if it's not a top collision
-                    elif (self.rect.right > obj.rect.left and self.rect.left < obj.rect.right) or(self.rect.left > obj.rect.right and self.rect.right < obj.rect.left):
+                    elif (self.rect.right > obj.rect.left and self.rect.left < obj.rect.right) or (self.rect.left > obj.rect.right and self.rect.right < obj.rect.left):
                         # Side collision detected
                         self.push_power = 0
                         if self.dir == "left":
@@ -161,8 +163,8 @@ class Player(main_entity.Main_entity):
 
                 if isinstance(obj, rail.Rail):
 
-                    rail_sound = pygame.mixer.Sound("sounds/Rail.mp3")
-                    rail_sound.play()
+
+                    self.rail_sound.play()
                     self.rect.bottom = obj.rect.top
                     self.push_power = self.max_speed * self.grind_speed
                     self.vel = 0  # Reset vertical velocity
@@ -186,8 +188,8 @@ class Player(main_entity.Main_entity):
 
     def jump(self):
         if not self.is_jumping:
-            jump_sound = pygame.mixer.Sound("sounds/Jump.mp3")
-            jump_sound.play()
+
+            self.jump_sound.play()
             self.vel = self.lift  # Apply lift to velocity
             self.on_ground = False  # Set on_ground to False since player is now in the air
             self.is_jumping = True

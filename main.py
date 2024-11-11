@@ -17,8 +17,8 @@ def main():
     running = True
 
     while running:
-        clock.tick(TICK_RATE)
-        for event in pygame.event.get():
+        events = pygame.event.get()
+        for event in events:
             if event.type == pygame.QUIT:
                 running = False
 
@@ -29,7 +29,8 @@ def main():
                 if event.key == pygame.K_q:
                     running = False
         draw()
-        update()
+        update(events)
+        clock.tick(TICK_RATE)
 
     pygame.quit()
 
@@ -44,9 +45,10 @@ def draw():
 
 
 
-def update():
-    state_manager.update()
-
+def update(events):
+    state_manager.update(events)
+    fps = clock.get_fps()
+    pygame.display.set_caption(f"Pygame - FPS: {fps:.2f}")
 
 if __name__ == "__main__":
     main()

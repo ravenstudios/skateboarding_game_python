@@ -3,10 +3,17 @@ import pygame
 from constants import *
 
 class Main_entity(pygame.sprite.Sprite):
+
+    spritesheet = None
+
+
     def __init__(self, x, y):
         super().__init__()
 
-
+        if Main_entity.spritesheet is None:
+             Main_entity.spritesheet = pygame.image.load("imgs/skate-Sheet.png").convert_alpha()
+             scaled_width, scaled_height = Main_entity.spritesheet.get_size()
+             Main_entity.spritesheet = pygame.transform.scale(Main_entity.spritesheet, (scaled_width * SCALER, scaled_height * SCALER))
         self.x = x
         self.y = y
         self.width = BLOCK_SIZE
@@ -17,10 +24,10 @@ class Main_entity(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
 
-        self.spritesheet = pygame.image.load("imgs/skate-Sheet.png").convert_alpha()
-        scaled_width, scaled_height = self.spritesheet.get_size()
-        self.spritesheet = pygame.transform.scale(self.spritesheet, (scaled_width * SCALER, scaled_height * SCALER))
 
+
+
+        self.spritesheet = Main_entity.spritesheet
         self.y_sprite_sheet_index = 0
         self.frame = 0
         self.max_frame = (self.spritesheet.get_width() // BLOCK_SIZE) - 1
@@ -34,14 +41,14 @@ class Main_entity(pygame.sprite.Sprite):
 
     def update(self, cam_offset):
         self.update_cam_offset(cam_offset)
-        self.animate()
+        if self.rect.x > -BLOCK_SIZE and self.rect.x < GAME_WIDTH:
+            self.animate()
 
 
 
 
     def update_cam_offset(self, cam_offset):
-        self.rect.x += cam_offset[0]
-        self.rect.y += cam_offset[1]
+        self.rect.x += cam_offset
 
 
 

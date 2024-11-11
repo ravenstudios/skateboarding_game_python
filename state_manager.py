@@ -14,7 +14,7 @@ class State_manager():
 
 
 
-        self.state = 0
+        self.state = 1
         self.is_paused = False
         self.camera = camera.Camera()
         self.map = map.Map()
@@ -26,12 +26,12 @@ class State_manager():
         self.title_group.add(title.Title(50, 50))
 
 
-        self.player = player.Player(GAME_WIDTH // 2, GAME_HEIGHT - BLOCK_SIZE * 2)
+        self.player = player.Player(GAME_WIDTH // 2, 0)
         self.player_group.add(self.player)
         self.is_title_music_playing = False
         self.is_stage_music_playing = False
 
-    def update(self):
+    def update(self, events):
         self.check_keyboard()
         # Title Screen
         if self.state == 0:
@@ -57,7 +57,7 @@ class State_manager():
 
             cam_offset = self.camera.update_offset(self.player)
             self.blocks.update(cam_offset)
-            self.player_group.update(cam_offset, self.blocks)
+            self.player_group.update(events, cam_offset, self.blocks)
 
         # Pause
         if self.state == 2:
