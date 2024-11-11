@@ -4,7 +4,7 @@ from constants import *
 import main_entity
 import block
 import rail
-
+import ramp
 
 
 class Player(main_entity.Main_entity):
@@ -160,12 +160,23 @@ class Player(main_entity.Main_entity):
                     self.on_ground = True
                     self.is_jumping = False
                     self.is_grinding = True
+
+
+                if isinstance(obj, ramp.Ramp):
+                    self.rect.bottom = obj.rect.top
+                    self.push_power = self.max_speed * self.grind_speed
+                    self.vel = self.lift * 2  # Reset vertical velocity
+                    self.on_ground = False
+                    self.is_jumping = False
+                    self.is_grinding = False
+
+
         else:
             self.on_ground = False
             self.is_grinding = False
 
     def jump(self):
-        if self.on_ground:
+        if not self.is_jumping:
             self.vel = self.lift  # Apply lift to velocity
             self.on_ground = False  # Set on_ground to False since player is now in the air
             self.is_jumping = True

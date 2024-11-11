@@ -5,7 +5,7 @@ import block
 import camera
 import rail
 import map
-
+import ramp
 
 clock = pygame.time.Clock()
 surface = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
@@ -27,7 +27,7 @@ player_group.add(player)
 for i in range(100):
     blocks.add(block.Block(i * BLOCK_SIZE, GAME_HEIGHT - BLOCK_SIZE))
 
-for i in range(20):
+for i in range(10):
 
     blocks.add(rail.Rail(i * BLOCK_SIZE + (BLOCK_SIZE * 10), GAME_HEIGHT - BLOCK_SIZE * 3))
 
@@ -35,7 +35,9 @@ for i in range(10):
     blocks.add(block.Block(i * BLOCK_SIZE, GAME_HEIGHT - BLOCK_SIZE))
     blocks.add(block.Block(i * BLOCK_SIZE + (BLOCK_SIZE * 2), GAME_HEIGHT - BLOCK_SIZE * 2))
 
+blocks.add(ramp.Ramp(32 * BLOCK_SIZE, GAME_HEIGHT - BLOCK_SIZE * 2, "right"))
 
+blocks.add(ramp.Ramp(35 * BLOCK_SIZE, GAME_HEIGHT - BLOCK_SIZE * 2, "left"))
 
 # blocks = map.load_map()
 

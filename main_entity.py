@@ -50,7 +50,9 @@ class Main_entity(pygame.sprite.Sprite):
         if col < 0 or col > self.spritesheet.get_height():
             raise ValueError("col is either below 0 or larger than spritesheet")
 
-        image = pygame.Surface([BLOCK_SIZE, BLOCK_SIZE])
+        # image = pygame.Surface([BLOCK_SIZE, BLOCK_SIZE])
+        image = pygame.Surface([BLOCK_SIZE, BLOCK_SIZE], pygame.SRCALPHA)
+        image = image.convert_alpha()  # Convert to support per-pixel alpha
         image.blit(self.spritesheet, (0, 0), (row * (BLOCK_SIZE), col  * (BLOCK_SIZE) , BLOCK_SIZE, BLOCK_SIZE))
         return image
 
