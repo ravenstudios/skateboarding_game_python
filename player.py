@@ -48,26 +48,56 @@ class Player(main_entity.Main_entity):
 
     def check_keyboard(self, events):
         for event in events:
+            if event.type == pygame.JOYBUTTONDOWN:
+                    button = event.button
+
+                    if button == 12:
+                        self.duck()
+
+                    if button == 13:
+                        self.left()
+
+                    if button == 14:
+                        self.right()
+
+                    if button == 0:
+                        self.jump()
+
+                    if button == 1:
+                        self.push()
 
             if event.type == pygame.KEYDOWN:
-
                 if event.key == pygame.K_LEFT:
-                    if self.dir == "right":
-                        self.push_power = 0
-                    self.dir = "left"
-                    self.push()
+                    self.left()
 
                 if event.key == pygame.K_RIGHT:
-                    if self.dir == "left":
-                        self.push_power = 0
-                    self.dir = "right"
-                    self.push()
+                    self.right()
 
                 if event.key == pygame.K_SPACE:
                     self.jump()
 
                 if event.key == pygame.K_DOWN:
                     self.duck()
+
+                if event.key == pygame.K_v:
+                    self.push()
+
+
+    def right(self):
+        if self.dir == "left":
+            self.push_power = 0
+        self.dir = "right"
+
+
+
+
+    def left(self):
+        if self.dir == "right":
+            self.push_power = 0
+        self.dir = "left"
+
+
+
 
     def update_animations(self):
 
