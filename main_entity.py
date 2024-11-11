@@ -40,7 +40,8 @@ class Main_entity(pygame.sprite.Sprite):
 
 
     def update_cam_offset(self, cam_offset):
-        self.rect.x += cam_offset
+        self.rect.x += cam_offset[0]
+        self.rect.y += cam_offset[1]
 
 
 

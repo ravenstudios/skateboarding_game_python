@@ -132,7 +132,7 @@ class Player(main_entity.Main_entity):
 
     def check_collisions(self, objects):
         # Get all collisions with objects in the group
-        collisions = pygame.sprite.spritecollide(self, objects, False)
+        collisions = pygame.sprite.spritecollide(self, objects, False, pygame.sprite.collide_mask)
         if collisions:
             for obj in collisions:
                 if isinstance(obj, block.Block):  # Check if the object is a block
@@ -150,7 +150,7 @@ class Player(main_entity.Main_entity):
                         return  # Exit after top collision to prevent side adjustment
 
                     # Otherwise, check for side collisions only if it's not a top collision
-                    elif self.rect.right > obj.rect.left and self.rect.left < obj.rect.right:
+                    elif (self.rect.right > obj.rect.left and self.rect.left < obj.rect.right) or(self.rect.left > obj.rect.right and self.rect.right < obj.rect.left):
                         # Side collision detected
                         self.push_power = 0
                         if self.dir == "left":
