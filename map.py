@@ -1,25 +1,37 @@
+from constants import *
+import pygame
+import block
+import rail
+import ramp
+
+
+
 class Map(object):
-    # for i in range(100):
-    #     blocks.add(block.Block(i * BLOCK_SIZE, GAME_HEIGHT - BLOCK_SIZE))
-    # blocks.add(block.Block(400, GAME_HEIGHT - BLOCK_SIZE * 2))
-    # blocks.add(rail.Rail(100, 100))
-
-
-    # y max is 800 / 64 = 12.5
-
-
-
-    # 
-    #                     RRRRRRR   B
-    #            RRRRRRRR           B
-    # BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 
     def __init__(self):
-        pass
-        # load text file
-        # parse tsext file and build objects
-        # return pygame groups
+        self.lines = []
+        self.blocks = pygame.sprite.Group()
 
-    def load_map(self):
-        pass
-        # return pygame group
+
+    def load(self, map_file):
+        with open(map_file, "r") as map:
+            self.lines = map.readlines()
+
+        r = 0
+
+        for r in range(len(self.lines)):
+            c = 0
+            for c in range(len(self.lines[r])):
+                # print(f"R:{r * BLOCK_SIZE}   C:{c * BLOCK_SIZE}  char:{self.lines[r][c]}")  # Output will be a list of lines
+                tile = self.lines[r][c]
+
+                if tile =="R":
+                    self.blocks.add(rail.Rail(c * BLOCK_SIZE, r * BLOCK_SIZE))
+                if tile =="B":
+                    self.blocks.add(block.Block(c * BLOCK_SIZE, r * BLOCK_SIZE))
+                if tile ==">":
+                    self.blocks.add(ramp.Ramp(c * BLOCK_SIZE, r * BLOCK_SIZE, "left"))
+                if tile =="<":
+                    self.blocks.add(ramp.Ramp(c * BLOCK_SIZE, r * BLOCK_SIZE, "right"))
+
+        return self.blocks
