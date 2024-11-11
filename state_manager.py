@@ -7,7 +7,7 @@ import rail
 import map
 import ramp
 import title
-
+import background_manager
 
 class State_manager():
     def __init__(self):
@@ -28,6 +28,9 @@ class State_manager():
 
         self.player = player.Player(GAME_WIDTH // 2, 0)
         self.player_group.add(self.player)
+
+        self.background_manager = background_manager.Background_manager()
+
         self.is_title_music_playing = False
         self.is_stage_music_playing = False
 
@@ -56,6 +59,7 @@ class State_manager():
 
 
             cam_offset = self.camera.update_offset(self.player)
+            self.background_manager.update(cam_offset)
             self.blocks.update(cam_offset)
             self.player_group.update(events, cam_offset, self.blocks)
 
@@ -87,8 +91,12 @@ class State_manager():
             self.title_group.draw(surface)
 
         if self.state == 1:
+            self.background_manager.draw_bg(surface)
+            self.background_manager.draw_mg(surface)
+            self.background_manager.draw_fg(surface)
             self.blocks.draw(surface)
             self.player_group.draw(surface)
+
 
         if self.state == 2:
             pass
