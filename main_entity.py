@@ -30,6 +30,8 @@ class Main_entity(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.mask_img = self.mask.to_surface()
 
+
+
     def update(self, cam_offset):
         self.update_cam_offset(cam_offset)
         self.animate()

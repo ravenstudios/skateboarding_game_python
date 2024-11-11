@@ -26,8 +26,16 @@ player_group.add(player)
 
 for i in range(100):
     blocks.add(block.Block(i * BLOCK_SIZE, GAME_HEIGHT - BLOCK_SIZE))
-blocks.add(block.Block(400, GAME_HEIGHT - BLOCK_SIZE * 2))
-blocks.add(rail.Rail(100, 100))
+
+for i in range(20):
+
+    blocks.add(rail.Rail(i * BLOCK_SIZE + (BLOCK_SIZE * 10), GAME_HEIGHT - BLOCK_SIZE * 3))
+
+for i in range(10):
+    blocks.add(block.Block(i * BLOCK_SIZE, GAME_HEIGHT - BLOCK_SIZE))
+    blocks.add(block.Block(i * BLOCK_SIZE + (BLOCK_SIZE * 2), GAME_HEIGHT - BLOCK_SIZE * 2))
+
+
 
 # blocks = map.load_map()
 
