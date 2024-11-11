@@ -29,7 +29,7 @@ class Player(main_entity.Main_entity):
 
         self.ground_level = GAME_HEIGHT + 200  # New ground level, 64 pixels above GAME_HEIGHT
         self.y_sprite_sheet_index = 0
-
+        self.can_play_landing_sound = False
 
 
     def update(self, cam_offset, objects):
@@ -115,6 +115,8 @@ class Player(main_entity.Main_entity):
 
 
     def push(self):
+        push_sound = pygame.mixer.Sound("sounds/Kick.mp3")
+        push_sound.play()
         if self.push_power < self.max_speed:
             self.push_power += self.acceleration
 
@@ -141,6 +143,10 @@ class Player(main_entity.Main_entity):
                         self.on_ground = True
                         self.is_jumping = False  # Player is now on the ground
                         self.rect.bottom = obj.rect.top  # Position the player on top of the block
+                        if self.can_play_landing_sound:
+                            landing_sound = pygame.mixer.Sound("sounds/Land.mp3")
+                            landing_sound.play()
+                            self.can_play_landing_sound = False
                         return  # Exit after top collision to prevent side adjustment
 
                     # Otherwise, check for side collisions only if it's not a top collision
@@ -154,6 +160,9 @@ class Player(main_entity.Main_entity):
                         return  # Exit after side collision to prevent further adjustments
 
                 if isinstance(obj, rail.Rail):
+
+                    rail_sound = pygame.mixer.Sound("sounds/Rail.mp3")
+                    rail_sound.play()
                     self.rect.bottom = obj.rect.top
                     self.push_power = self.max_speed * self.grind_speed
                     self.vel = 0  # Reset vertical velocity
@@ -177,6 +186,9 @@ class Player(main_entity.Main_entity):
 
     def jump(self):
         if not self.is_jumping:
+            jump_sound = pygame.mixer.Sound("sounds/Jump.mp3")
+            jump_sound.play()
             self.vel = self.lift  # Apply lift to velocity
             self.on_ground = False  # Set on_ground to False since player is now in the air
             self.is_jumping = True
+            self.can_play_landing_sound = True

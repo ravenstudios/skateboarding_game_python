@@ -7,6 +7,7 @@ clock = pygame.time.Clock()
 surface = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
 
 pygame.init()
+pygame.mixer.init()
 
 state_manager = state_manager.State_manager()
 

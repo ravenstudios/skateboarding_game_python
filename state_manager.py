@@ -11,6 +11,9 @@ import title
 
 class State_manager():
     def __init__(self):
+
+
+
         self.state = 0
         self.is_paused = False
         self.camera = camera.Camera()
@@ -25,15 +28,33 @@ class State_manager():
 
         self.player = player.Player(GAME_WIDTH // 2, GAME_HEIGHT - BLOCK_SIZE * 2)
         self.player_group.add(self.player)
+        self.is_title_music_playing = False
+        self.is_stage_music_playing = False
 
     def update(self):
         self.check_keyboard()
         # Title Screen
         if self.state == 0:
             self.title_group.update()
+            if not self.is_title_music_playing:
 
+                pygame.mixer.music.load("sounds/Skate Game Title.mp3")
+                pygame.mixer.music.play(-1)
+
+                self.is_title_music_playing = True
+                self.is_stage_music_playing = False
         # Main Game Loop
         if self.state == 1:
+
+            if self.is_stage_music_playing == False:
+                pygame.mixer.music.stop()
+                self.is_title_music_playing = False
+                self.is_stage_music_playing = True
+
+                pygame.mixer.music.load("sounds/Stage 1.mp3")
+                pygame.mixer.music.play(-1)
+
+
             cam_offset = self.camera.update_offset(self.player)
             self.blocks.update(cam_offset)
             self.player_group.update(cam_offset, self.blocks)
