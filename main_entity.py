@@ -18,8 +18,8 @@ class Main_entity(pygame.sprite.Sprite):
         self.rect.topleft = (self.x, self.y)
 
         self.spritesheet = pygame.image.load("imgs/skate-Sheet.png").convert_alpha()
-        scaled_width, scaled_heights = self.spritesheet.get_size()
-        self.spritesheet = pygame.transform.scale(self.spritesheet, (scaled_width * SCALER, scaled_heights * SCALER))
+        scaled_width, scaled_height = self.spritesheet.get_size()
+        self.spritesheet = pygame.transform.scale(self.spritesheet, (scaled_width * SCALER, scaled_height * SCALER))
 
         self.y_sprite_sheet_index = 0
         self.frame = 0
@@ -51,9 +51,9 @@ class Main_entity(pygame.sprite.Sprite):
             raise ValueError("col is either below 0 or larger than spritesheet")
 
         # image = pygame.Surface([BLOCK_SIZE, BLOCK_SIZE])
-        image = pygame.Surface([BLOCK_SIZE, BLOCK_SIZE], pygame.SRCALPHA)
+        image = pygame.Surface([self.rect.width, self.rect.height], pygame.SRCALPHA)
         image = image.convert_alpha()  # Convert to support per-pixel alpha
-        image.blit(self.spritesheet, (0, 0), (row * (BLOCK_SIZE), col  * (BLOCK_SIZE) , BLOCK_SIZE, BLOCK_SIZE))
+        image.blit(self.spritesheet, (0, 0), (row * (self.rect.width), col  * (self.rect.height) , self.rect.width, self.rect.height))
         return image
 
 
