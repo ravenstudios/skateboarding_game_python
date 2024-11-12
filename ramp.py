@@ -13,7 +13,7 @@ import random
 class Ramp(main_entity.Main_entity):
     def __init__(self, x, y, dir):
         super().__init__(x, y)
-
+        self.dir = dir
 
         if dir == "right":
             self.y_sprite_sheet_index = 6

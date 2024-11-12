@@ -164,52 +164,75 @@ class Player(main_entity.Main_entity):
 
     def check_collisions(self, objects):
         # Get all collisions with objects in the group
+        if self.is_jumping:
+            surface = pygame.Surface((BLOCK_SIZE, BLOCK_SIZE), pygame.SRCALPHA)
+            surface.fill((255, 255, 255, 255))  # Fill with white, fully opaque
+            self.mask = pygame.mask.from_surface(surface)
+
+            
         collisions = pygame.sprite.spritecollide(self, objects, False, pygame.sprite.collide_mask)
         if collisions:
             for obj in collisions:
                 if isinstance(obj, block.Block):  # Check if the object is a block
-                    # Check if colliding from the top
-                    if self.rect.bottom > obj.rect.top and self.rect.top < obj.rect.top:
-                        # Top collision detected
+                    # Top collision (falling onto a block)
+                    if self.vel > 0 and self.rect.bottom > obj.rect.top and self.rect.top < obj.rect.top:
+
+                        # Position player on top of the block
+                        self.rect.bottom = obj.rect.top
                         self.vel = 0  # Reset vertical velocity
                         self.on_ground = True
                         self.is_jumping = False  # Player is now on the ground
-                        self.rect.bottom = obj.rect.top  # Position the player on top of the block
                         if self.can_play_landing_sound:
-
                             self.landing_sound.play()
                             self.can_play_landing_sound = False
-                        return  # Exit after top collision to prevent side adjustment
+                        return  # Exit after top collision
 
-                    # Otherwise, check for side collisions only if it's not a top collision
-                    elif (self.rect.right > obj.rect.left and self.rect.left < obj.rect.right) or (self.rect.left > obj.rect.right and self.rect.right < obj.rect.left):
-                        # Side collision detected
-                        self.push_power = 0
-                        if self.dir == "left":
-                            self.rect.left = obj.rect.right  # Prevent movement into the block from the left
-                        else:
-                            self.rect.right = obj.rect.left  # Prevent movement into the block from the right
-                        return  # Exit after side collision to prevent further adjustments
+
+
+                    # Bottom collision (hitting head on a block)
+                    if self.rect.top < obj.rect.bottom and self.vel < 0:
+
+                        self.rect.top = obj.rect.bottom
+                        self.vel = 0
+                        return  # Exit after bottom collision
+
+
+
+                    # Side collisions
+                    if self.rect.right > obj.rect.left and self.rect.left < obj.rect.right:
+
+                        if self.dir == "left" and self.rect.left < obj.rect.right:  # Colliding from left
+                            self.rect.left = obj.rect.right
+                        elif self.dir == "right" and self.rect.right > obj.rect.left:  # Colliding from right
+                            self.rect.right = obj.rect.left
+                        self.push_power = 0  # Reset push power on side collision
+                        return  # Exit after side collision
+
+
+
 
                 if isinstance(obj, rail.Rail):
 
-
-                    self.rail_sound.play()
-                    self.rect.bottom = obj.rect.top
-                    self.push_power = self.max_speed * self.grind_speed
-                    self.vel = 0  # Reset vertical velocity
-                    self.on_ground = True
-                    self.is_jumping = False
-                    self.is_grinding = True
+                    if self.rect.y < obj.rect.y:
+                        self.rail_sound.play()
+                        self.rect.bottom = obj.rect.top
+                        self.push_power = self.max_speed * self.grind_speed
+                        self.vel = 0  # Reset vertical velocity
+                        self.on_ground = True
+                        self.is_jumping = False
+                        self.is_grinding = True
+                        return
 
 
                 if isinstance(obj, ramp.Ramp):
-                    self.rect.bottom = obj.rect.top
-                    self.push_power = self.max_speed * self.grind_speed
-                    self.vel = self.lift * 2  # Reset vertical velocity
-                    self.on_ground = False
-                    self.is_jumping = False
-                    self.is_grinding = False
+                    if self.dir == obj.dir:
+                        self.rect.bottom = obj.rect.top
+                        self.push_power = self.max_speed * self.grind_speed
+                        self.vel = self.lift * 2  # Reset vertical velocity
+                        self.on_ground = False
+                        self.is_jumping = False
+                        self.is_grinding = False
+                        return
 
 
         else:

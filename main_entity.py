@@ -45,7 +45,8 @@ class Main_entity(pygame.sprite.Sprite):
             self.animate()
 
 
-
+    def draw(self, surface):
+        surface.blit(self.mask_img, (50, 50))
 
     def update_cam_offset(self, cam_offset):
         self.rect.x += cam_offset
@@ -60,7 +61,7 @@ class Main_entity(pygame.sprite.Sprite):
 
         # image = pygame.Surface([BLOCK_SIZE, BLOCK_SIZE])
         image = pygame.Surface([self.rect.width, self.rect.height], pygame.SRCALPHA)
-        image = image.convert_alpha()  # Convert to support per-pixel alpha
+        # image = image.convert_alpha()  # Convert to support per-pixel alpha
         image.blit(self.spritesheet, (0, 0), (row * (self.rect.width), col  * (self.rect.height) , self.rect.width, self.rect.height))
         return image
 
@@ -80,3 +81,4 @@ class Main_entity(pygame.sprite.Sprite):
 
         self.image = self.get_image_from_sprite_sheet(self.frame, self.y_sprite_sheet_index)
         self.mask = pygame.mask.from_surface(self.image)
+        self.mask_img = self.mask.to_surface()

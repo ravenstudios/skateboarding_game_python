@@ -97,6 +97,7 @@ class State_manager():
             self.blocks.draw(surface)
             self.player_group.draw(surface)
 
+            self.player.draw(surface)
 
         if self.state == 2:
             pass
