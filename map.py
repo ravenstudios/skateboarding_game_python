@@ -17,8 +17,13 @@ class Map(object):
         with open(map_file, "r") as map:
             self.lines = map.readlines()
 
-        r = 0
 
+        # remove comments from map map_file
+
+        self.lines = [line for line in self.lines if "#" not in line]
+
+
+        r = 0
         for r in range(len(self.lines)):
             c = 0
             for c in range(len(self.lines[r])):
