@@ -14,6 +14,6 @@ class Block(main_entity.Main_entity):
     def __init__(self, x, y):
         super().__init__(x, y)
 
-        self.y_sprite_sheet_index = 4
+        self.y_sprite_sheet_index = 16
         self.frame = random.randint(0, 3)
         self.animation_speed = 0

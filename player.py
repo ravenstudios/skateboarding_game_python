@@ -10,7 +10,8 @@ import ramp
 class Player(main_entity.Main_entity):
     def __init__(self, x, y):
         super().__init__(x, y)
-
+        # self.rect.height += 20
+        # self.y -= self.rect.height
         self.max_speed = 10
         self.acceleration = 5
         self.friction = 0.02
@@ -102,16 +103,22 @@ class Player(main_entity.Main_entity):
     def update_animations(self):
 
         if self.dir == "left":
-            self.y_sprite_sheet_index = 0
+            self.y_sprite_sheet_index = 10
 
         if self.dir == "right":
-            self.y_sprite_sheet_index = 1
+            self.y_sprite_sheet_index = 2
 
         if self.is_jumping == True:
             if self.dir == "right":
-                self.y_sprite_sheet_index = 3
+                self.y_sprite_sheet_index = 4
             else:
-                self.y_sprite_sheet_index = 3
+                self.y_sprite_sheet_index = 12
+
+        if self.is_grinding == True:
+            if self.dir == "right":
+                self.y_sprite_sheet_index = 6
+            else:
+                self.y_sprite_sheet_index = 14
 
 
 
@@ -169,7 +176,7 @@ class Player(main_entity.Main_entity):
             surface.fill((255, 255, 255, 255))  # Fill with white, fully opaque
             self.mask = pygame.mask.from_surface(surface)
 
-            
+
         collisions = pygame.sprite.spritecollide(self, objects, False, pygame.sprite.collide_mask)
         if collisions:
             for obj in collisions:

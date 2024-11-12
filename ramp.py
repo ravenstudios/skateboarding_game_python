@@ -16,6 +16,6 @@ class Ramp(main_entity.Main_entity):
         self.dir = dir
 
         if dir == "right":
-            self.y_sprite_sheet_index = 6
+            self.y_sprite_sheet_index = 18
         else:
-            self.y_sprite_sheet_index = 7
+            self.y_sprite_sheet_index = 19

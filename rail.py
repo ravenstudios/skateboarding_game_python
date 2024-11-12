@@ -14,6 +14,6 @@ class Rail(main_entity.Main_entity):
     def __init__(self, x, y):
         super().__init__(x, y)
 
-        self.y_sprite_sheet_index = 5
+        self.y_sprite_sheet_index = 17
         self.frame = 0
         self.animation_speed = 0

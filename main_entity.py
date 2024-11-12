@@ -1,7 +1,7 @@
 
 import pygame
 from constants import *
-
+import player
 class Main_entity(pygame.sprite.Sprite):
 
     spritesheet = None
@@ -11,7 +11,7 @@ class Main_entity(pygame.sprite.Sprite):
         super().__init__()
 
         if Main_entity.spritesheet is None:
-             Main_entity.spritesheet = pygame.image.load("imgs/skate-Sheet.png").convert_alpha()
+             Main_entity.spritesheet = pygame.image.load("imgs/Char-Sheet.png").convert_alpha()
              scaled_width, scaled_height = Main_entity.spritesheet.get_size()
              Main_entity.spritesheet = pygame.transform.scale(Main_entity.spritesheet, (scaled_width * SCALER, scaled_height * SCALER))
         self.x = x
@@ -60,9 +60,14 @@ class Main_entity(pygame.sprite.Sprite):
             raise ValueError("col is either below 0 or larger than spritesheet")
 
         # image = pygame.Surface([BLOCK_SIZE, BLOCK_SIZE])
-        image = pygame.Surface([self.rect.width, self.rect.height], pygame.SRCALPHA)
-        # image = image.convert_alpha()  # Convert to support per-pixel alpha
-        image.blit(self.spritesheet, (0, 0), (row * (self.rect.width), col  * (self.rect.height) , self.rect.width, self.rect.height))
+        if isinstance(self, player.Player):
+            image = pygame.Surface([self.rect.width, self.rect.height], pygame.SRCALPHA)
+
+            image.blit(self.spritesheet, (0, 0), (row * (self.rect.width), (col + 1)  * (self.rect.height) , self.rect.width, self.rect.height))
+            image.blit(self.spritesheet, (0, 0), (row * (self.rect.width), col  * (self.rect.height), self.rect.width, self.rect.height))
+        else:
+            image = pygame.Surface([self.rect.width, self.rect.height], pygame.SRCALPHA)
+            image.blit(self.spritesheet, (0, 0), (row * (self.rect.width), col  * (self.rect.height) , self.rect.width, self.rect.height))
         return image
 
 
