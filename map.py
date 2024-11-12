@@ -11,7 +11,7 @@ class Map(object):
     def __init__(self):
         self.lines = []
         self.blocks = pygame.sprite.Group()
-
+        self.player_location = (0, 0)
 
     def load(self, map_file):
         with open(map_file, "r") as map:
@@ -33,5 +33,7 @@ class Map(object):
                     self.blocks.add(ramp.Ramp(c * BLOCK_SIZE, r * BLOCK_SIZE, "left"))
                 if tile =="<":
                     self.blocks.add(ramp.Ramp(c * BLOCK_SIZE, r * BLOCK_SIZE, "right"))
+                if tile =="P":
+                    self.player_location = (c * BLOCK_SIZE, r * BLOCK_SIZE)
 
         return self.blocks

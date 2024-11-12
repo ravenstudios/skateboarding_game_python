@@ -26,7 +26,7 @@ class State_manager():
         self.title_group.add(title.Title(50, 50))
 
 
-        self.player = player.Player(GAME_WIDTH // 2, 0)
+        self.player = player.Player(self.map.player_location[0], self.map.player_location[1])
         self.player_group.add(self.player)
 
         self.background_manager = background_manager.Background_manager()
