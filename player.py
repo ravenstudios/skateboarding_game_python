@@ -11,6 +11,7 @@ class Player(main_entity.Main_entity):
     def __init__(self, x, y):
         super().__init__(x, y)
 
+        self.is_pushing = False
         self.max_speed = 5
         self.acceleration = 5
         self.friction = 0.02
@@ -76,7 +77,8 @@ class Player(main_entity.Main_entity):
                     self.right()
 
                 if event.key == pygame.K_SPACE:
-                    self.jump()
+                    self.is_pushing = True
+
 
                 if event.key == pygame.K_DOWN:
                     self.duck()
@@ -84,6 +86,10 @@ class Player(main_entity.Main_entity):
                 if event.key == pygame.K_v:
                     self.push()
 
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_SPACE:
+                    self.jump()
+                    self.is_pushing = False
 
     def right(self):
         if self.dir == "left":
@@ -126,6 +132,13 @@ class Player(main_entity.Main_entity):
     def movement(self):
         if self.on_ground:
             self.push()
+
+        if self.is_pushing:
+            self.max_speed = 10
+        else:
+            self.max_speed = 5
+
+            
         if self.dir == "left":
             self.rect.x -= self.push_power
         else:

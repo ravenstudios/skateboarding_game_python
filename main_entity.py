@@ -41,6 +41,7 @@ class Main_entity(pygame.sprite.Sprite):
 
     def update(self, cam_offset):
         self.update_cam_offset(cam_offset)
+        # only in on screen
         if self.rect.x > -BLOCK_SIZE and self.rect.x < GAME_WIDTH:
             self.animate()
 
