@@ -11,7 +11,7 @@ class Player(main_entity.Main_entity):
     def __init__(self, x, y):
         super().__init__(x, y)
 
-        self.max_speed = 10
+        self.max_speed = 5
         self.acceleration = 5
         self.friction = 0.02
         self.push_power = 0
@@ -124,6 +124,8 @@ class Player(main_entity.Main_entity):
 
 
     def movement(self):
+        if self.on_ground:
+            self.push()
         if self.dir == "left":
             self.rect.x -= self.push_power
         else:
@@ -156,7 +158,7 @@ class Player(main_entity.Main_entity):
 
     def push(self):
 
-        self.push_sound.play()
+        # self.push_sound.play()
         if self.push_power < self.max_speed:
             self.push_power += self.acceleration
 

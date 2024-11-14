@@ -28,7 +28,7 @@ class State_manager():
 
 
         self.player = player.Player(self.map.player_location[0], self.map.player_location[1])
-        self.skater_avatar = skater_avatar.Skater_avatar(0, 0, self.player)
+        self.skater_avatar = skater_avatar.Skater_avatar(self.map.player_location[0], self.map.player_location[1], self.player)
         self.player_group.add(self.player, self.skater_avatar)
 
         self.background_manager = background_manager.Background_manager()
@@ -102,7 +102,7 @@ class State_manager():
             self.player_group.draw(surface)
 
             # FOR TESTING
-            # self.player.draw(surface)
+            self.player.draw(surface)
 
 
         if self.state == 2:
