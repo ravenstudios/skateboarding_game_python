@@ -46,6 +46,9 @@ class Main_entity(pygame.sprite.Sprite):
 
 
     def draw(self, surface):
+        image = pygame.Surface([self.rect.width, self.rect.height])
+        image.fill((200, 0, 200))
+        surface.blit(image, (0, 50))
         surface.blit(self.mask_img, (50, 50))
 
     def update_cam_offset(self, cam_offset):
@@ -60,14 +63,9 @@ class Main_entity(pygame.sprite.Sprite):
             raise ValueError("col is either below 0 or larger than spritesheet")
 
         # image = pygame.Surface([BLOCK_SIZE, BLOCK_SIZE])
-        if isinstance(self, player.Player):
-            image = pygame.Surface([self.rect.width, self.rect.height], pygame.SRCALPHA)
 
-            image.blit(self.spritesheet, (0, 0), (row * (self.rect.width), (col + 1)  * (self.rect.height) , self.rect.width, self.rect.height))
-            image.blit(self.spritesheet, (0, 0), (row * (self.rect.width), col  * (self.rect.height), self.rect.width, self.rect.height))
-        else:
-            image = pygame.Surface([self.rect.width, self.rect.height], pygame.SRCALPHA)
-            image.blit(self.spritesheet, (0, 0), (row * (self.rect.width), col  * (self.rect.height) , self.rect.width, self.rect.height))
+        image = pygame.Surface([self.rect.width, self.rect.height], pygame.SRCALPHA)
+        image.blit(self.spritesheet, (0, 0), (row * (self.rect.width), col  * (self.rect.height) , self.rect.width, self.rect.height))
         return image
 
 

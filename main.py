@@ -29,6 +29,9 @@ def main():
 
                 if event.key == pygame.K_q:
                     running = False
+
+                if event.key == pygame.K_r:
+                    state_manager_obj.player.reset()
         draw()
         update(events)
         clock.tick(TICK_RATE)

@@ -8,6 +8,7 @@ import map
 import ramp
 import title
 import background_manager
+import skater_avatar
 
 class State_manager():
     def __init__(self):
@@ -27,7 +28,8 @@ class State_manager():
 
 
         self.player = player.Player(self.map.player_location[0], self.map.player_location[1])
-        self.player_group.add(self.player)
+        self.skater_avatar = skater_avatar.Skater_avatar(0, 0, self.player)
+        self.player_group.add(self.player, self.skater_avatar)
 
         self.background_manager = background_manager.Background_manager()
 
@@ -63,8 +65,8 @@ class State_manager():
             cam_offset = self.camera.update_offset(self.player)
             self.background_manager.update(cam_offset)
             self.blocks.update(cam_offset)
-            self.player_group.update(events, cam_offset, self.blocks)
-
+            self.player.update(events, cam_offset, self.blocks)
+            self.skater_avatar.update()
         # Pause
         if self.state == 2:
             pass
@@ -99,7 +101,9 @@ class State_manager():
             self.blocks.draw(surface)
             self.player_group.draw(surface)
 
-            
+            # FOR TESTING
+            # self.player.draw(surface)
+
 
         if self.state == 2:
             pass

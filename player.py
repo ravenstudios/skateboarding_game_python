@@ -10,8 +10,7 @@ import ramp
 class Player(main_entity.Main_entity):
     def __init__(self, x, y):
         super().__init__(x, y)
-        # self.rect.height += 20
-        # self.y -= self.rect.height
+
         self.max_speed = 10
         self.acceleration = 5
         self.friction = 0.02
@@ -45,7 +44,9 @@ class Player(main_entity.Main_entity):
         self.update_cam_offset(cam_offset)
         self.animate()
 
-
+    def reset(self):
+        self.rect.x = 200
+        self.rect.y = 0
 
     def check_keyboard(self, events):
         for event in events:
@@ -103,22 +104,22 @@ class Player(main_entity.Main_entity):
     def update_animations(self):
 
         if self.dir == "left":
-            self.y_sprite_sheet_index = 10
+            self.y_sprite_sheet_index = 11
 
         if self.dir == "right":
-            self.y_sprite_sheet_index = 2
+            self.y_sprite_sheet_index = 3
 
         if self.is_jumping == True:
             if self.dir == "right":
-                self.y_sprite_sheet_index = 4
+                self.y_sprite_sheet_index = 5
             else:
-                self.y_sprite_sheet_index = 12
+                self.y_sprite_sheet_index = 13
 
         if self.is_grinding == True:
             if self.dir == "right":
-                self.y_sprite_sheet_index = 6
+                self.y_sprite_sheet_index = 7
             else:
-                self.y_sprite_sheet_index = 14
+                self.y_sprite_sheet_index = 13
 
 
 
