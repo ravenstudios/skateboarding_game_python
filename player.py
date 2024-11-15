@@ -84,6 +84,8 @@ class Player(main_entity.Main_entity):
                         self.is_grind_btn_held = False
                         self.is_grinding = False
 
+
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     self.left()
@@ -245,13 +247,13 @@ class Player(main_entity.Main_entity):
                         # Bottom collision (hitting head on a block)
 
 
-                    if self.rect.top < obj.rect.bottom and self.vel < 0:
-                            if abs(self.rect.midtop[0] - obj.rect.midbottom[0]) < BLOCK_SIZE // 2:
-                                self.rect.top = obj.rect.bottom
-                                self.vel = 0
-                                return  # Exit after bottom collision
-
-
+                    # if self.rect.top < obj.rect.bottom and self.vel < 0:
+                    #         if abs(self.rect.midtop[0] - obj.rect.midbottom[0]) < BLOCK_SIZE // 2:
+                    #             self.rect.top = obj.rect.bottom
+                    #             self.vel = 0
+                    #             return  # Exit after bottom collision
+                    #
+                    #
 
 
                 if isinstance(obj, rail.Rail):
