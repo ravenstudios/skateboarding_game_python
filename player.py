@@ -23,7 +23,7 @@ class Player(main_entity.Main_entity):
         self.grind_friction = 0.1
         self.is_jumping = False
         self.is_grinding = False
-        self.on_ground = False  # Track if player is on the ground
+        self.is_on_ground = False  # Track if player is on the ground
         self.is_stopped = False
         self.dir = "right"
         self.cam_offset = 0
@@ -46,7 +46,7 @@ class Player(main_entity.Main_entity):
         self.cam_offset = cam_offset
 
 
-        
+
     def reset(self):
         self.rect.x = 200
         self.rect.y = 0
@@ -124,12 +124,12 @@ class Player(main_entity.Main_entity):
             if self.dir == "right":
                 self.y_sprite_sheet_index = 7
             else:
-                self.y_sprite_sheet_index = 13
+                self.y_sprite_sheet_index = 15
 
 
 
     def movement(self):
-        if self.on_ground and not self.is_stopped:
+        if self.is_on_ground and not self.is_stopped:
             self.push()
         if self.dir == "left":
             self.rect.x -= self.push_power
@@ -151,7 +151,7 @@ class Player(main_entity.Main_entity):
             if self.push_power < 0:
                 self.push_power = 0
 
-        if not self.on_ground:
+        if not self.is_on_ground:
             self.vel += self.grav
             self.rect.y += self.vel
 
@@ -170,31 +170,19 @@ class Player(main_entity.Main_entity):
 
 
     def draw_stats(self, surface):
-        font = pygame.font.Font(None, 36)
-        # self.max_speed = 5
-        # self.acceleration = 5
-        # self.friction = 0.02
-        # self.push_power = 0
-        # self.lift = -10
-        # self.grav = 0.3
-        # self.vel = 0
-        # self.max_vel = -10
-        # self.grind_speed = 1.5
-        # self.grind_friction = 0.1
-        # self.is_jumping = False
-        # self.is_grinding = False
-        # self.on_ground = False  # Track if player is on the ground
-        # self.is_stopped = False
-        # self.dir = "right"
-        image = pygame.Surface([300, 150], pygame.SRCALPHA)
-        image.fill((100, 100, 100, 100))
+
         stats = [
             f"X: {self.rect.x}   Y: {self.rect.y}",
             f"VEL: {self.vel:.2f}   PP: {self.push_power:.2f}",
             f"JUMPING: {self.is_jumping}",
             f"GRINDING: {self.is_grinding}",
+            f"ON GROUND: {self.is_on_ground}",
             f"CAM_OFFSET: {self.cam_offset}"
         ]
+        font_size = 36
+        font = pygame.font.Font(None, font_size)
+        image = pygame.Surface([300, font_size * len(stats)], pygame.SRCALPHA)
+        image.fill((100, 100, 100, 100))
 
         # Render each line and blit it with an offset for each new line
         y_offset = 0
@@ -207,6 +195,7 @@ class Player(main_entity.Main_entity):
 
     def duck(self):
         pass
+
 
 
 
@@ -228,8 +217,9 @@ class Player(main_entity.Main_entity):
                         # Position player on top of the block
                         self.rect.bottom = obj.rect.top
                         self.vel = 0  # Reset vertical velocity
-                        self.on_ground = True
+                        self.is_on_ground = True
                         self.is_jumping = False  # Player is now on the ground
+                        self.is_grinding = False
                         if self.can_play_landing_sound:
                             self.landing_sound.play()
                             self.can_play_landing_sound = False
@@ -257,16 +247,16 @@ class Player(main_entity.Main_entity):
 
 
                 if isinstance(obj, rail.Rail):
-                    if not self.is_grinding:
-                        if self.rect.y < obj.rect.y:
-                            self.rail_sound.play()
-                            self.rect.bottom = obj.rect.top
-                            self.push_power = self.max_speed * self.grind_speed
-                            self.vel = 0  # Reset vertical velocity
-                            self.on_ground = True
-                            self.is_jumping = False
-                            self.is_grinding = True
-                            return
+
+                    if self.rect.y < obj.rect.y:
+                        self.rail_sound.play()
+                        self.rect.bottom = obj.rect.top
+                        self.push_power = self.max_speed * self.grind_speed
+                        self.vel = 0  # Reset vertical velocity
+                        self.is_on_ground = True
+                        self.is_jumping = False
+                        self.is_grinding = True
+                        return
 
 
                 if isinstance(obj, ramp.Ramp):
@@ -274,21 +264,21 @@ class Player(main_entity.Main_entity):
                         self.rect.bottom = obj.rect.top
                         self.push_power = self.max_speed * self.grind_speed
                         self.vel = self.lift * 2  # Reset vertical velocity
-                        self.on_ground = False
+                        self.is_on_ground = False
                         self.is_jumping = False
                         self.is_grinding = False
                         return
 
 
         else:
-            self.on_ground = False
-            self.is_grinding = False
+            self.is_on_ground = False
+            # self.is_grinding = False
 
     def jump(self):
         if not self.is_jumping:
 
             self.jump_sound.play()
             self.vel = self.lift  # Apply lift to velocity
-            self.on_ground = False  # Set on_ground to False since player is now in the air
+            self.is_on_ground = False  # Set on_ground to False since player is now in the air
             self.is_jumping = True
             self.can_play_landing_sound = True
