@@ -1,9 +1,6 @@
 import pygame
 from constants import *
-import block
-import rail
-import ramp
-
+from objects import (block, rail, ramp)
 
 
 class CollisionHandler():

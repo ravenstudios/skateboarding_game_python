@@ -1,4 +1,3 @@
-
 import pygame
 from constants import *
 import main_entity

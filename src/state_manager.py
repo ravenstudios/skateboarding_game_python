@@ -1,22 +1,24 @@
-from constants import *
+import os
 import pygame
-from player import player
-import block
-import camera
-import rail
+
+from constants import *
+
+from player import (player, skater_avatar)
+from objects import (block, rail, ramp)
+
 import map
-import ramp
+import camera
 import title
 import background_manager
-import skater_avatar
-import os
+
+
 
 class State_manager():
     def __init__(self):
 
 
 
-        self.state = 1
+        self.state = 0
         self.is_paused = False
         self.camera = camera.Camera()
         self.map = map.Map()

@@ -1,11 +1,10 @@
+import os
 import csv
 import pygame
-import block
-import rail
-import ramp
-from constants import *
-import os
 
+from constants import *
+
+from objects import (block, rail, ramp)
 
 
 class Map(object):
