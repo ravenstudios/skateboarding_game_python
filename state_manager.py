@@ -19,7 +19,7 @@ class State_manager():
         self.is_paused = False
         self.camera = camera.Camera()
         self.map = map.Map()
-        self.blocks = self.map.load("stage1.map")
+        self.blocks = self.map.load("lvl1.csv")
 
 
         self.player_group = pygame.sprite.Group()
