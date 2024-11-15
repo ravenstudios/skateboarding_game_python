@@ -1,6 +1,6 @@
 from constants import *
 import pygame
-import player
+from player import player
 import block
 import camera
 import rail
@@ -104,7 +104,7 @@ class State_manager():
             self.player_group.draw(surface)
 
             # FOR TESTING
-            self.player.draw_stats(surface)
+            self.player.animation_handler.draw_stats(surface)
 
 
         if self.state == 2:
