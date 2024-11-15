@@ -11,7 +11,6 @@ class Player(main_entity.Main_entity):
     def __init__(self, x, y):
         super().__init__(x, y)
 
-        self.is_pushing = False
         self.max_speed = 5
         self.acceleration = 5
         self.friction = 0.02
@@ -25,10 +24,10 @@ class Player(main_entity.Main_entity):
         self.is_jumping = False
         self.is_grinding = False
         self.on_ground = False  # Track if player is on the ground
-
+        self.is_stopped = False
         self.dir = "right"
+        self.cam_offset = 0
 
-        self.ground_level = GAME_HEIGHT + 200  # New ground level, 64 pixels above GAME_HEIGHT
         self.y_sprite_sheet_index = 0
         self.can_play_landing_sound = False
 
@@ -44,7 +43,10 @@ class Player(main_entity.Main_entity):
         self.check_collisions(objects)
         self.update_cam_offset(cam_offset)
         self.animate()
+        self.cam_offset = cam_offset
 
+
+        
     def reset(self):
         self.rect.x = 200
         self.rect.y = 0
@@ -77,8 +79,7 @@ class Player(main_entity.Main_entity):
                     self.right()
 
                 if event.key == pygame.K_SPACE:
-                    self.is_pushing = True
-
+                    self.jump()
 
                 if event.key == pygame.K_DOWN:
                     self.duck()
@@ -86,13 +87,10 @@ class Player(main_entity.Main_entity):
                 if event.key == pygame.K_v:
                     self.push()
 
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_SPACE:
-                    self.jump()
-                    self.is_pushing = False
 
     def right(self):
         if self.dir == "left":
+            self.is_stopped = False
             self.push_power = 0
         self.dir = "right"
 
@@ -101,6 +99,7 @@ class Player(main_entity.Main_entity):
 
     def left(self):
         if self.dir == "right":
+            self.is_stopped = False
             self.push_power = 0
         self.dir = "left"
 
@@ -130,15 +129,8 @@ class Player(main_entity.Main_entity):
 
 
     def movement(self):
-        if self.on_ground:
+        if self.on_ground and not self.is_stopped:
             self.push()
-
-        if self.is_pushing:
-            self.max_speed = 10
-        else:
-            self.max_speed = 5
-
-            
         if self.dir == "left":
             self.rect.x -= self.push_power
         else:
@@ -177,7 +169,40 @@ class Player(main_entity.Main_entity):
 
 
 
+    def draw_stats(self, surface):
+        font = pygame.font.Font(None, 36)
+        # self.max_speed = 5
+        # self.acceleration = 5
+        # self.friction = 0.02
+        # self.push_power = 0
+        # self.lift = -10
+        # self.grav = 0.3
+        # self.vel = 0
+        # self.max_vel = -10
+        # self.grind_speed = 1.5
+        # self.grind_friction = 0.1
+        # self.is_jumping = False
+        # self.is_grinding = False
+        # self.on_ground = False  # Track if player is on the ground
+        # self.is_stopped = False
+        # self.dir = "right"
+        image = pygame.Surface([300, 150], pygame.SRCALPHA)
+        image.fill((100, 100, 100, 100))
+        stats = [
+            f"X: {self.rect.x}   Y: {self.rect.y}",
+            f"VEL: {self.vel:.2f}   PP: {self.push_power:.2f}",
+            f"JUMPING: {self.is_jumping}",
+            f"GRINDING: {self.is_grinding}",
+            f"CAM_OFFSET: {self.cam_offset}"
+        ]
 
+        # Render each line and blit it with an offset for each new line
+        y_offset = 0
+        for line in stats:
+            text_surface = font.render(line, True, (255, 255, 255))
+            image.blit(text_surface, (0, y_offset))
+            y_offset += font.get_linesize()  # Move down for the next line
+        surface.blit(image, (0, 0))
 
 
     def duck(self):
@@ -187,13 +212,13 @@ class Player(main_entity.Main_entity):
 
     def check_collisions(self, objects):
         # Get all collisions with objects in the group
-        if self.is_jumping:
-            surface = pygame.Surface((BLOCK_SIZE, BLOCK_SIZE), pygame.SRCALPHA)
-            surface.fill((255, 255, 255, 255))  # Fill with white, fully opaque
-            self.mask = pygame.mask.from_surface(surface)
+
+        # surface = pygame.Surface((BLOCK_SIZE, BLOCK_SIZE), pygame.SRCALPHA)
+        # surface.fill((255, 255, 255, 255))  # Fill with white, fully opaque
+        # self.mask = pygame.mask.from_surface(surface)
 
 
-        collisions = pygame.sprite.spritecollide(self, objects, False, pygame.sprite.collide_mask)
+        collisions = pygame.sprite.spritecollide(self, objects, False, )
         if collisions:
             for obj in collisions:
                 if isinstance(obj, block.Block):  # Check if the object is a block
@@ -210,41 +235,38 @@ class Player(main_entity.Main_entity):
                             self.can_play_landing_sound = False
                         return  # Exit after top collision
 
-
-
-                    # Bottom collision (hitting head on a block)
-                    if self.rect.top < obj.rect.bottom and self.vel < 0:
-
-                        self.rect.top = obj.rect.bottom
-                        self.vel = 0
-                        return  # Exit after bottom collision
-
-
-
                     # Side collisions
                     if self.rect.right > obj.rect.left and self.rect.left < obj.rect.right:
+                            self.is_stopped = True
+                            if self.dir == "left" and self.rect.left < obj.rect.right:  # Colliding from left
+                                self.rect.left = obj.rect.right
+                            elif self.dir == "right" and self.rect.right > obj.rect.left:  # Colliding from right
+                                self.rect.right = obj.rect.left
+                            self.push_power = 0  # Reset push power on side collision
+                            return  # Exit after side collision
+                        # Bottom collision (hitting head on a block)
 
-                        if self.dir == "left" and self.rect.left < obj.rect.right:  # Colliding from left
-                            self.rect.left = obj.rect.right
-                        elif self.dir == "right" and self.rect.right > obj.rect.left:  # Colliding from right
-                            self.rect.right = obj.rect.left
-                        self.push_power = 0  # Reset push power on side collision
-                        return  # Exit after side collision
+
+                    if self.rect.top < obj.rect.bottom and self.vel < 0:
+                            if abs(self.rect.midtop[0] - obj.rect.midbottom[0]) < BLOCK_SIZE // 2:
+                                self.rect.top = obj.rect.bottom
+                                self.vel = 0
+                                return  # Exit after bottom collision
 
 
 
 
                 if isinstance(obj, rail.Rail):
-
-                    if self.rect.y < obj.rect.y:
-                        self.rail_sound.play()
-                        self.rect.bottom = obj.rect.top
-                        self.push_power = self.max_speed * self.grind_speed
-                        self.vel = 0  # Reset vertical velocity
-                        self.on_ground = True
-                        self.is_jumping = False
-                        self.is_grinding = True
-                        return
+                    if not self.is_grinding:
+                        if self.rect.y < obj.rect.y:
+                            self.rail_sound.play()
+                            self.rect.bottom = obj.rect.top
+                            self.push_power = self.max_speed * self.grind_speed
+                            self.vel = 0  # Reset vertical velocity
+                            self.on_ground = True
+                            self.is_jumping = False
+                            self.is_grinding = True
+                            return
 
 
                 if isinstance(obj, ramp.Ramp):

@@ -102,7 +102,7 @@ class State_manager():
             self.player_group.draw(surface)
 
             # FOR TESTING
-            self.player.draw(surface)
+            self.player.draw_stats(surface)
 
 
         if self.state == 2:

@@ -8,6 +8,7 @@ surface = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
 
 pygame.init()
 pygame.mixer.init()
+pygame.font.init()
 
 state_manager_obj = state_manager.State_manager()
 
