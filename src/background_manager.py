@@ -3,7 +3,7 @@ from constants import *
 import os
 
 
-class Background_manager():
+class BackgroundManager():
     def __init__(self):
         bg_path = os.path.join(os.path.dirname(__file__), "..", "assets/imgs/background.png")
         mg_path = os.path.join(os.path.dirname(__file__), "..", "assets/imgs/midground.png")

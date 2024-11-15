@@ -5,7 +5,7 @@ import main_entity
 
 
 
-class Skater_avatar(main_entity.Main_entity):
+class SkaterAvatar(main_entity.Main_entity):
     def __init__(self, x, y, player):
         super().__init__(x, y)
         self.player = player
