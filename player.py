@@ -27,6 +27,7 @@ class Player(main_entity.Main_entity):
         self.is_stopped = False
         self.dir = "right"
         self.cam_offset = 0
+        self.is_grind_btn_held = False
 
         self.y_sprite_sheet_index = 0
         self.can_play_landing_sound = False
@@ -70,6 +71,18 @@ class Player(main_entity.Main_entity):
 
                     if button == 1:
                         self.push()
+
+                    if button == 3:
+                        self.is_grind_btn_held = True
+
+
+            if event.type == pygame.JOYBUTTONUP:
+                    button = event.button
+
+                    if button == 3:
+                        # if not self.is_grinding:
+                        self.is_grind_btn_held = False
+                        self.is_grinding = False
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
@@ -177,7 +190,8 @@ class Player(main_entity.Main_entity):
             f"JUMPING: {self.is_jumping}",
             f"GRINDING: {self.is_grinding}",
             f"ON GROUND: {self.is_on_ground}",
-            f"CAM_OFFSET: {self.cam_offset}"
+            f"CAM_OFFSET: {self.cam_offset}",
+            f"GRND_BTN: {self.is_grind_btn_held}",
         ]
         font_size = 36
         font = pygame.font.Font(None, font_size)
@@ -200,13 +214,6 @@ class Player(main_entity.Main_entity):
 
 
     def check_collisions(self, objects):
-        # Get all collisions with objects in the group
-
-        # surface = pygame.Surface((BLOCK_SIZE, BLOCK_SIZE), pygame.SRCALPHA)
-        # surface.fill((255, 255, 255, 255))  # Fill with white, fully opaque
-        # self.mask = pygame.mask.from_surface(surface)
-
-
         collisions = pygame.sprite.spritecollide(self, objects, False, )
         if collisions:
             for obj in collisions:
@@ -220,6 +227,7 @@ class Player(main_entity.Main_entity):
                         self.is_on_ground = True
                         self.is_jumping = False  # Player is now on the ground
                         self.is_grinding = False
+                        # self.is_grind_btn_held = False
                         if self.can_play_landing_sound:
                             self.landing_sound.play()
                             self.can_play_landing_sound = False
@@ -247,16 +255,16 @@ class Player(main_entity.Main_entity):
 
 
                 if isinstance(obj, rail.Rail):
-
-                    if self.rect.y < obj.rect.y:
-                        self.rail_sound.play()
-                        self.rect.bottom = obj.rect.top
-                        self.push_power = self.max_speed * self.grind_speed
-                        self.vel = 0  # Reset vertical velocity
-                        self.is_on_ground = True
-                        self.is_jumping = False
-                        self.is_grinding = True
-                        return
+                    if self.is_grind_btn_held:
+                        if self.rect.y < obj.rect.y:
+                            self.rail_sound.play()
+                            self.rect.bottom = obj.rect.top
+                            self.push_power = self.max_speed * self.grind_speed
+                            self.vel = 0  # Reset vertical velocity
+                            self.is_on_ground = True
+                            self.is_jumping = False
+                            self.is_grinding = True
+                            return
 
 
                 if isinstance(obj, ramp.Ramp):
@@ -281,4 +289,6 @@ class Player(main_entity.Main_entity):
             self.vel = self.lift  # Apply lift to velocity
             self.is_on_ground = False  # Set on_ground to False since player is now in the air
             self.is_jumping = True
+            self.is_grinding = False
+            # self.is_grind_btn_held = False
             self.can_play_landing_sound = True

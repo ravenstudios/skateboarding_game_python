@@ -95,9 +95,9 @@ class State_manager():
             self.title_group.draw(surface)
 
         if self.state == 1:
-            self.background_manager.draw_bg(surface)
-            self.background_manager.draw_mg(surface)
-            self.background_manager.draw_fg(surface)
+            # self.background_manager.draw_bg(surface)
+            # self.background_manager.draw_mg(surface)
+            # self.background_manager.draw_fg(surface)
             self.blocks.draw(surface)
             self.player_group.draw(surface)
 
