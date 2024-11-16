@@ -18,18 +18,29 @@ print(joysticks)
 
 def main():
     running = True
-
+    mute = False
     while running:
         events = pygame.event.get()
         for event in events:
             if event.type == pygame.QUIT:
                 running = False
 
+
+
             if event.type == pygame.KEYDOWN:
                 keys = pygame.key.get_pressed()
 
                 if event.key == pygame.K_q:
                     running = False
+
+                if event.key == pygame.K_m:
+
+                    if mute:
+                        mute = False
+                        pygame.mixer.music.set_volume(1)
+                    else:
+                        mute = True
+                        pygame.mixer.music.set_volume(0)
 
                 if event.key == pygame.K_r:
                     state_manager_obj.player.reset()

@@ -3,7 +3,7 @@ from constants import *
 import main_entity
 
 import os
-from player import sound_manager, input_handler, movement_handler, collision_handler, animation_handler
+from player import (sound_manager, input_handler, movement_handler, collision_handler, animation_handler)
 
 class Player(main_entity.Main_entity):
     def __init__(self, x, y):

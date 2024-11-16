@@ -20,7 +20,7 @@ class State_manager():
         self.camera = camera.Camera()
         self.map = map.Map()
         self.blocks = self.map.load("maps/lvl1.csv")
-
+        print(f"Blokcs:{self.blocks}")
         self.player_group = pygame.sprite.Group()
         self.title_group = pygame.sprite.Group()
         self.title_group.add(title.Title(50, 50))
@@ -85,10 +85,12 @@ class State_manager():
             if not self.is_paused:
                 self.state = 2
                 self.is_paused = True
+
             else:
                 self.is_paused = False
                 self.state = 1
-            pygame.time.delay(500)
+
+
 
     def draw(self, surface):
         if self.state == 0:
@@ -96,6 +98,9 @@ class State_manager():
 
         if self.state == 1:
             # Only draw the visible blocks group
+            self.background_manager.draw_bg(surface)
+            self.background_manager.draw_mg(surface)
+            self.background_manager.draw_fg(surface)
             self.visible_blocks.draw(surface)
             self.player_group.draw(surface)
 
@@ -106,7 +111,8 @@ class State_manager():
             pass
 
     def reduce_objects(self, group):
+        return group
         # Compute and return only the visible objects
         return pygame.sprite.Group(
-            obj for obj in group if -GAME_WIDTH <= obj.rect.x < GAME_WIDTH * 2 and 0 <= obj.rect.y < GAME_HEIGHT
+            obj for obj in group if -GAME_WIDTH <= obj.rect.left < GAME_WIDTH * 2 and 0 <= obj.rect.y < GAME_HEIGHT + BLOCK_SIZE
         )

@@ -16,16 +16,16 @@ class InputHandler():
                         self.player.duck()
 
                     if button == 13:
-                        self.player.left()
+                        self.player.movement_handler.left()
 
                     if button == 14:
-                        self.player.right()
+                        self.player.movement_handler.right()
 
                     if button == 0:
-                        self.player.jump()
+                        self.player.movement_handler.jump()
 
                     if button == 1:
-                        self.player.push()
+                        self.player.movement_handler.push()
 
                     if button == 3:
                         self.player.is_grind_btn_held = True

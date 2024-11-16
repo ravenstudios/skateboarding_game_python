@@ -1,7 +1,7 @@
 
 import pygame
 from constants import *
-import player
+
 import os
 class Main_entity(pygame.sprite.Sprite):
 
@@ -36,23 +36,19 @@ class Main_entity(pygame.sprite.Sprite):
         self.animation_speed = 10
         self.ticks_till_frame_change = self.animation_speed
 
-        self.mask = pygame.mask.from_surface(self.image)
-        self.mask_img = self.mask.to_surface()
 
 
 
     def update(self, cam_offset):
         self.update_cam_offset(cam_offset)
-        # only in on screen
-        if self.rect.x > -BLOCK_SIZE and self.rect.x < GAME_WIDTH:
-            self.animate()
+        self.animate()
 
 
     def draw(self, surface):
         image = pygame.Surface([self.rect.width, self.rect.height])
         image.fill((200, 0, 200))
         surface.blit(image, (0, 50))
-        surface.blit(self.mask_img, (50, 50))
+
 
     def update_cam_offset(self, cam_offset):
         self.rect.x += cam_offset
@@ -85,6 +81,22 @@ class Main_entity(pygame.sprite.Sprite):
             if self.frame > self.max_frame:
                 self.frame = 0
 
+
+
+
         self.image = self.get_image_from_sprite_sheet(self.frame, self.y_sprite_sheet_index)
-        self.mask = pygame.mask.from_surface(self.image)
-        self.mask_img = self.mask.to_surface()
+
+
+    def create_tiled_surface(self):
+
+        image = pygame.Surface([self.rect.width, self.rect.height], pygame.SRCALPHA)
+        image.fill((255, 0, 0))
+
+        # Tile the texture
+        for row in range(0, self.rect.height // BLOCK_SIZE):
+            for col in range(0, self.rect.width // BLOCK_SIZE):
+                image.blit(self.spritesheet, (col * BLOCK_SIZE, row * BLOCK_SIZE), (0, self.y_sprite_sheet_index * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE))
+
+                # surface.blit(texture, (col, row))
+
+        self.image = image

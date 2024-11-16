@@ -1,9 +1,3 @@
-# push -> w key for giving the skateboard a small push using physics
-# jump -> space for jump. Must have physics to use velocity
-# duck -> down arrow to make player half size to go under objects
-# Player must use the pygame.sprite.Sprite class. this dosnt have to be done first but must be refractored in.
-# Must have draw and update functions.
-# A camera system will be used to side scroll, we will add that later.
 import pygame, random
 from constants import *
 import main_entity
@@ -11,9 +5,16 @@ import random
 
 
 class Block(main_entity.Main_entity):
-    def __init__(self, x, y):
+    def __init__(self, x, y, w, h):
         super().__init__(x, y)
-
+        self.rect.width = w
+        self.rect.height = h
         self.y_sprite_sheet_index = 16
         self.frame = random.randint(0, 3)
         self.animation_speed = 0
+
+        # print(self.rect)
+
+    def update(self, cam_offset):
+        self.update_cam_offset(cam_offset)
+        self.create_tiled_surface()
