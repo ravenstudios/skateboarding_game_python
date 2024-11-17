@@ -9,7 +9,7 @@ class MovementHandler():
     def right(self):
         if self.player.dir == "left":
             self.player.is_stopped = False
-            self.player.push_power = 0
+            self.player.x_vel = 0
         self.player.dir = "right"
 
 
@@ -18,32 +18,29 @@ class MovementHandler():
     def left(self):
         if self.player.dir == "right":
             self.player.is_stopped = False
-            self.player.push_power = 0
+            self.player.x_vel = 0
         self.player.dir = "left"
 
 
     def movement(self):
-        if self.player.is_on_ground and not self.player.is_stopped:
-            self.push()
+        if not self.player.is_stopped:
+            self.player.x_vel += self.player.acceleration
+
         if self.player.dir == "left":
-            self.player.rect.x -= self.player.push_power
+            self.player.rect.x -= self.player.x_vel
         else:
-            self.player.rect.x += self.player.push_power
+            self.player.rect.x += self.player.x_vel
+
+        self.player.x_vel = max(self.player.max_speed, self.player.max_vel)
 
 
-        if self.player.rect.y > GAME_HEIGHT:
-            self.player.rect.y = 0
-            self.player.rect.x = 0
-
-
-
-        if self.player.push_power > 0:
+        if self.player.x_vel > 0:
             if self.player.is_grinding:
-                self.player.push_power -=self.player.grind_friction
+                self.player.x_vel -=self.player.grind_friction
             else:
-                self.player.push_power -= self.player.friction
-            if self.player.push_power < 0:
-                self.player.push_power = 0
+                self.player.x_vel -= self.player.friction
+            if self.player.x_vel < 0:
+                self.player.x_vel = 0
 
         if not self.player.is_on_ground:
             self.player.vel += self.player.grav
@@ -60,8 +57,8 @@ class MovementHandler():
 
 
     def push(self):
-        if self.player.push_power < self.player.max_speed:
-            self.player.push_power += self.player.acceleration
+        if self.player.x_vel < self.player.max_speed:
+            self.player.x_vel += self.player.acceleration
 
 
     def jump(self):

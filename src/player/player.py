@@ -9,10 +9,11 @@ class Player(main_entity.Main_entity):
     def __init__(self, x, y):
         super().__init__(x, y)
 
-        self.max_speed = 5
-        self.acceleration = 5
+        self.max_speed = 10
+        self.acceleration = 0.5
+        self.x_vel = 0
         self.friction = 0.02
-        self.push_power = 0
+
         self.lift = -10
         self.grav = 0.3
         self.vel = 0
