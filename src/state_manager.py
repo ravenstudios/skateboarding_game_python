@@ -105,7 +105,7 @@ class State_manager():
             self.player_group.draw(surface)
 
             # FOR TESTING
-            # self.player.animation_handler.draw_stats(surface)
+            self.player.animation_handler.draw_stats(surface)
 
         if self.state == 2:
             pass

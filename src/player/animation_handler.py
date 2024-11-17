@@ -33,12 +33,12 @@ class AnimationHandler(object):
 
         stats = [
             f"X: {self.player.rect.x}   Y: {self.player.rect.y}",
-            f"VEL: {self.player.vel:.2f}   PP: {self.player.push_power:.2f}",
+            f"VEL: {self.player.vel:.2f}   X_VEL: {self.player.x_vel:.2f}",
             f"JUMPING: {self.player.is_jumping}",
             f"GRINDING: {self.player.is_grinding}",
             f"ON GROUND: {self.player.is_on_ground}",
             f"CAM_OFFSET: {self.player.cam_offset}",
-            f"GRND_BTN: {self.player.is_grind_btn_held}",
+            f"Stoped: {self.player.is_stopped}",
         ]
         font_size = 36
         font = pygame.font.Font(None, font_size)

@@ -26,12 +26,12 @@ class MovementHandler():
         if not self.player.is_stopped:
             self.player.x_vel += self.player.acceleration
 
-        if self.player.dir == "left":
-            self.player.rect.x -= self.player.x_vel
-        else:
-            self.player.rect.x += self.player.x_vel
+            if self.player.dir == "left":
+                self.player.rect.x -= self.player.x_vel
+            else:
+                self.player.rect.x += self.player.x_vel
 
-        self.player.x_vel = max(self.player.max_speed, self.player.max_vel)
+            self.player.x_vel = max(self.player.max_speed, self.player.max_vel)
 
 
         if self.player.x_vel > 0:
@@ -63,7 +63,7 @@ class MovementHandler():
 
     def jump(self):
         if not self.player.is_jumping:
-
+            self.player.is_stopped = False
             self.player.sound_manager.jump_sound.play()
             self.player.vel = self.player.lift  # Apply lift to velocity
             self.player.is_on_ground = False  # Set on_ground to False since player is now in the air

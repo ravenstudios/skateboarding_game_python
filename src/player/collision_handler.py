@@ -28,16 +28,30 @@ class CollisionHandler():
                             self.player.can_play_landing_sound = False
                         return  # Exit after top collision
 
-                    # Side collisions
-                    if self.player.rect.right > obj.rect.left and self.player.rect.left < obj.rect.right:
+                    # Side collisions Right Side
+                    if (self.player.rect.right > obj.rect.left and self.player.rect.left < obj.rect.left):
+                        if not self.player.is_jumping:
                             self.player.is_stopped = True
-                            if self.player.dir == "left" and self.player.rect.left < obj.rect.right:  # Colliding from left
-                                self.player.rect.left = obj.rect.right
-                            elif self.player.dir == "right" and self.player.rect.right > obj.rect.left:  # Colliding from right
-                                self.player.rect.right = obj.rect.left
-                            self.player.push_power = 0  # Reset push power on side collision
-                            return  # Exit after side collision
-                        # Bottom collision (hitting head on a block)
+                        self.player.rect.right = obj.rect.left
+                        return
+
+
+                    # Side collisions Left Side
+                    if (self.player.rect.left < obj.rect.right and self.player.rect.right > obj.rect.right):
+                        if not self.player.is_jumping:
+                            self.player.is_stopped = True
+                        self.player.rect.left = obj.rect.right
+                        return
+
+                        #  or (self.player.rect.left > obj.rect.right and self.player.rect.right < obj.rect.right):
+                        #     self.player.is_stopped = True
+                        #     if self.player.dir == "left" and self.player.rect.left < obj.rect.right:  # Colliding from left
+                        #         self.player.rect.left = obj.rect.right
+                        #     elif self.player.dir == "right" and self.player.rect.right > obj.rect.left:  # Colliding from right
+                        #         self.player.rect.right = obj.rect.left
+                        #     self.player.push_power = 0  # Reset push power on side collision
+                        #     return  # Exit after side collision
+                        # # Bottom collision (hitting head on a block)
 
 
                     # if self.player.rect.top < obj.rect.bottom and self.player.vel < 0:
